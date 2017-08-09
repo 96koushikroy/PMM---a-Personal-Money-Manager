@@ -32,14 +32,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require('./routes/index.js')(app);
 
-app.locals({
-
-    'currentUser':function (req,res) {
-        if(req.user) return 1;
-        else return 0;
-    }
-
-});
 
 
 // catch 404 and forward to error handler
