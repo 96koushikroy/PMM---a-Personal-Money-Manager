@@ -30,7 +30,20 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-require('./routes/index.js')(app);
+
+// required for passport
+app.use(session({
+    secret: 'koushikroy',
+    resave: true,
+    saveUninitialized: true
+} )); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
+
+
+
+require('./routes/index.js')(app,passport);
 
 
 

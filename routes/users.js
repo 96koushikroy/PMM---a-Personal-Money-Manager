@@ -12,11 +12,11 @@ router.showHome = function(req, res){
 };
 
 router.showLogin = function (req, res) {
-    res.render('login',{pageTitle:'Login',currentUser: req.user});
+    res.render('login',{pageTitle:'Login',currentUser: req.user, message: req.flash('loginMessage')});
 };
 
 router.showSignup = function (req, res) {
-    res.render('signup',{pageTitle:'Sign Up',currentUser: req.user});
+    res.render('signup',{pageTitle:'Sign Up',currentUser: req.user, message: req.flash('signupMessage')});
 };
 
 

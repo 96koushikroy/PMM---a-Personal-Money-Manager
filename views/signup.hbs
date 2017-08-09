@@ -2,8 +2,18 @@
 <div class="row">
     <div class="col-md-4 col-md-offset-1 col-sm-6 col-centered">
 
+        {{#if message}}
+            <div class="alert alert-danger">
+                {{message}}
+            </div>
+        {{/if}}
         <div class="tile tile-login">
             <h3 class="text-center" style="color: white">Sign Up</h3>
+
+
+            <form action="/signup" method="post">
+
+
             <div class="input-icon">
                 <span class="fa-user fa"></span>
                 <input type="text" name="fullname" class="form-control" placeholder="Full Name">
@@ -17,8 +27,8 @@
                 <span class="fa-lock fa"></span>
                 <input type="password" name="password" class="form-control" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;">
             </div>
-
-            <a href="#fakeLink" class="btn btn-block btn-primary btn-embossed">Sign up</a>
+                <input type="submit"class="btn btn-block btn-primary btn-embossed" value="SIGN UP">
+            </form>
         </div>
     </div>
 
