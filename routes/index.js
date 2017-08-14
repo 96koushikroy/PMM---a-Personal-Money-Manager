@@ -9,7 +9,7 @@ module.exports = function (app,passport) {
 
 
     // process the login form
-    app.post('/login', passport.authenticate('local-login', {
+    app.post('/login', notLoggedIn, passport.authenticate('local-login', {
             successRedirect : '/', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
@@ -20,7 +20,7 @@ module.exports = function (app,passport) {
             res.redirect('/');
     });
 
-    app.post('/signup', passport.authenticate('local-signup', {
+    app.post('/signup', notLoggedIn,passport.authenticate('local-signup', {
         successRedirect : '/', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
@@ -35,6 +35,14 @@ module.exports = function (app,passport) {
     app.post('/admin/addbank',dataController.postAddBankAdmin);
 
     app.get('/mybanks',isLoggedIn,dataController.showMyBanks);
+    app.post('/mybanks',isLoggedIn,dataController.addMyBanks);
+
+    app.get('/mybanks/delete/:bid',isLoggedIn,dataController.deleteMyBanks);
+
+
+    app.get('/user/process/withdraw',isLoggedIn,dataController.processWithdraw);
+    app.post('/user/process/deposit',isLoggedIn,dataController.processDeposit);
+
 };
 
 
@@ -42,6 +50,18 @@ function isLoggedIn(req, res, next) {
 
     // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}
+
+
+
+function notLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (!req.isAuthenticated())
         return next();
 
     // if they aren't redirect them to the home page

@@ -30,7 +30,7 @@
       </div>
 
       <ul class="nav navbar-nav">
-          <li><a href="/"><i class="fa fa-home"></i>Home</a></li>
+          <li><a href="{{homeUrl}}"><i class="fa fa-home"></i>Home</a></li>
           {{#if currentUser}}
 
               <li class="dropdown">
@@ -38,17 +38,22 @@
                   <ul class="dropdown-menu">
                       <div class="arrow top"></div>
                       <li>
-                          <a href="">
-                              <span class="fa fa-bank"></span> My Banks
+                          <a href="{{homeUrl}}/mybanks">
+                              <span class="fa fa-bank"></span> Banks
                           </a>
                       </li>
                       <li>
                           <a href="#">
-                              <span class="fa fa-user"></span> My Account
+                              <span class="fa fa-money"></span> Wallet
                           </a>
                       </li>
                       <li>
-                          <a href="/logout">
+                          <a href="#">
+                              <span class="fa fa-user"></span> Profile
+                          </a>
+                      </li>
+                      <li>
+                          <a href="{{homeUrl}}/logout">
                               <span class="fa fa-sign-out"></span> Logout
                           </a>
                       </li>
@@ -62,11 +67,11 @@
           {{else}}
 
               <li>
-                  <a href="/login">
+                  <a href="{{homeUrl}}/login">
                       <i class="fa fa-sign-in"></i> Login</a>
               </li>
               <li>
-                  <a href="/signup">
+                  <a href="{{homeUrl}}/signup">
                       <i class="fa fa-user"></i> Sign Up</a>
               </li>
 
