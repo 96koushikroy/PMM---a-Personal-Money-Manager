@@ -58,10 +58,88 @@
                     <tr>
                         <td>{{bankname}}</td>
                         <td>{{currentbalance}}</td>
-                        <td><a href="#" class="btn btn-embossed btn-success btn-sm depo">Deposit</a></td>
-                        <td><a href="#" class="btn btn-embossed btn-purple btn-sm withdr">Withdraw</a></td>
-                        <td><a href="{{homeUrl}}/mybanks/delete/{{bid}}" class="btn btn-embossed btn-danger btn-sm">Delete</a></td>
+                        <td><a href="#" onclick="$('#deposit{{bid}}').modal('show')"  class="btn btn-embossed btn-success btn-sm depo">Deposit</a></td>
+                        <td><a href="#" onclick="$('#withdraw{{bid}}').modal('show')" class="btn btn-embossed btn-purple btn-sm withdr">Withdraw</a></td>
+                        <td><a data-href="{{homeUrl}}/mybanks/delete/{{bid}}" data-toggle="modal" data-target="#confirm-delete" class="btn btn-embossed btn-danger btn-sm">Delete</a></td>
                     </tr>
+                    <div id="withdraw{{bid}}" class="modal fade">
+                        <div class="modal-dialog">
+                            <form action="/user/process/withdraw" method="post">
+                                <input type="hidden" name="bid" value="{{bid}}">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Withdraw Money from {{bankname}} </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-icon">
+                                            <span class="fa-money fa"></span>
+                                            <input type="number" class="form-control" name="amount" placeholder="Amount">
+                                        </div>
+                                        <br>
+
+                                        <div class="input-icon">
+                                            <span class="fa-book fa"></span>
+                                            <input type="text" class="form-control" name="desc" placeholder="Description">
+                                        </div>
+
+                                        <br>
+
+                                        <div class="input-icon">
+                                            <span class="fa-calendar fa"></span>
+                                            <input type="date" class="form-control" name="date" placeholder="Date">
+                                        </div>
+                                        <br>
+                                        <label >
+                                            <input type="checkbox" name="wall" value="1" data-toggle="checkbox" checked=""/>
+                                            Add this amout to your wallet?
+                                        </label>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <input type="submit" value="Complete" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div id="deposit{{bid}}" class="modal fade">
+                        <div class="modal-dialog">
+                            <form action="/user/process/deposit" method="post">
+                                <input type="hidden" name="bid" value="{{bid}}">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title">Deposit Money To {{bankname}} </h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="input-icon">
+                                            <span class="fa-money fa"></span>
+                                            <input type="number" class="form-control" name="amount" placeholder="Amount">
+                                        </div>
+                                        <br>
+                                        <div class="input-icon">
+                                            <span class="fa-book fa"></span>
+                                            <input type="text" class="form-control" name="desc" placeholder="Description">
+                                        </div>
+                                        <br>
+                                        <div class="input-icon">
+                                            <span class="fa-calendar fa"></span>
+                                            <input type="date" class="form-control" name="date" placeholder="Date">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <input type="submit" value="Complete" class="btn btn-primary">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 {{/each}}
                 </tbody>
             </table>
@@ -71,89 +149,24 @@
     </div>
 </div>
 
-
-
-<div id="withdraw" class="modal fade">
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="/user/process/withdraw">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Withdrawal Information</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="input-icon">
-                        <span class="fa-money fa"></span>
-                        <input type="number" class="form-control" name="amount" placeholder="Amount">
-                    </div>
-                    <br>
-
-                    <div class="input-icon">
-                        <span class="fa-book fa"></span>
-                        <input type="text" class="form-control" name="desc" placeholder="Description">
-                    </div>
-
-                    <br>
-
-                    <div class="input-icon">
-                        <span class="fa-calendar fa"></span>
-                        <input type="date" class="form-control" name="date" placeholder="Date">
-                    </div>
-                    <br>
-                    <label >
-                        <input type="checkbox" value="1" data-toggle="checkbox" checked=""/>
-                         Add this amout to your wallet?
-                    </label>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a href="javascript:void(0)" class="login-button btn btn-primary">Complete</a>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Confirm</h4>
             </div>
-        </form>
+            <div class="modal-body">
+                <p>Are you sure to delete this record?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
     </div>
 </div>
 
 
-<div id="deposit" class="modal fade">
-    <div class="modal-dialog">
-        <form action="/user/process/deposit">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Deposit Information</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="input-icon">
-                        <span class="fa-money fa"></span>
-                        <input type="number" class="form-control" name="amount" placeholder="Amount">
-                    </div>
-                    <br>
-
-                    <div class="input-icon">
-                        <span class="fa-book fa"></span>
-                        <input type="text" class="form-control" name="desc" placeholder="Description">
-                    </div>
-
-                    <br>
-
-                    <div class="input-icon">
-                        <span class="fa-calendar fa"></span>
-                        <input type="date" class="form-control" name="date" placeholder="Date">
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <a href="javascript:void(0)" class="login-button btn btn-primary">Complete</a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 
 
 <script>
@@ -163,13 +176,8 @@
             //console.log(form);
             form.submit();
         });
-
-        $(document).on("click",".withdr",function(){
-            $("#withdraw").modal('show');
+        $('#confirm-delete').on('show.bs.modal', function(e) {
+            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         });
-        $(document).on("click",".depo",function(){
-            $("#deposit").modal('show');
-        });
-
     });
 </script>

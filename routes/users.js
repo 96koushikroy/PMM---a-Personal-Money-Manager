@@ -53,7 +53,7 @@ router.postAddBankAdmin = function (req, res) {
 };
 
 router.showMyBanks = function (req, res) {
-    var uid = req.user.id;
+    var uid = req.user.uid;
     db.query('select * from banks where id not in (select bid from mybanks where uid = ?); select my.bid,my.currentbalance,b.bankname from mybanks my join banks b on b.id = my.bid where my.uid = ?',[uid,uid], function (error, results, fields) {
         if (error) throw error;
         res.render('addMyBank',{pageTitle: 'My Banks', bank: results[0],myBank:results[1],message: req.flash('message')});
@@ -64,7 +64,7 @@ router.showMyBanks = function (req, res) {
 
 router.addMyBanks = function (req, res) {
 
-    var uid = req.user.id;
+    var uid = req.user.uid;
     var amount = req.body.balance;
     var bid = req.body.bank;
 
@@ -81,7 +81,7 @@ router.addMyBanks = function (req, res) {
 };
 
 router.deleteMyBanks = function (req, res) {
-    var uid = req.user.id;
+    var uid = req.user.uid;
     var bid = req.params.bid;
     db.query('delete from mybanks where uid = ? and bid = ?;',[uid,bid], function (error, results, fields) {
         if (error) throw error;//es.render('addMyBank',{pageTitle: 'My Banks',message:error});
@@ -93,7 +93,17 @@ router.deleteMyBanks = function (req, res) {
 };
 
 router.processDeposit = function (req, res) {
-    var uid = req.user.id;
+    var uid = req.user.uid;
+    var bid = req.body.bid;
+    var amount = req.body.amount;
+    var description = req.body.desc;
+    var date = req.body.date;
+
+    db.query('insert into deposit values (?,?,?,?,?); update mybanks set currentbalance = currentbalance + ? where uid = ? and bid = ?;',[uid,bid,amount,description,date,parseInt(amount),uid,bid], function (error, results, fields) {
+        if (error) throw error;//es.render('addMyBank',{pageTitle: 'My Banks',message:error});
+        req.flash('message', 'The amount was Deposited Successfully!');
+        res.redirect('/mybanks');
+    });
 
     /*db.query('select my.bid,my.currentbalance,b.bankname from mybanks my join banks b on b.id = my.bid where my.uid = ?',[uid], function (error, results, fields) {
         if (error) throw error;//es.render('addMyBank',{pageTitle: 'My Banks',message:error});
@@ -103,26 +113,42 @@ router.processDeposit = function (req, res) {
 
 
 router.processWithdraw = function (req, res) {
-    var uid = req.user.id;
+    var uid = req.user.uid;
     var bid = req.body.bid;
     var amount = req.body.amount;
     var description = req.body.desc;
     var date = req.body.date;
+    var wallet = req.body.wall;
 
 
-    /*db.query('select currentbalance from mybanks where uid = ? and bid = ?',[uid,2], function (error, results, fields) {
+    db.query('select currentbalance from mybanks where uid = ? and bid = ?',[uid,bid], function (error, results, fields) {
         if (error) throw error;//es.render('addMyBank',{pageTitle: 'My Banks',message:error});
         //console.log('data' + results[0].currentbalance);
-        var currentBalance = results[0].currentbalance;
-        if(currentBalance == 0){
-            db.query('select * from banks;',function (err, resultss) {
-                res.send(resultss);
-            })
+        var currentBalance = results[0].currentbalance - parseInt(amount);
+        if(currentBalance >= 0){
+
+            if(wallet){
+                db.query('insert into withdraw values (?,?,?,?,?,?); update mybanks set currentbalance = currentbalance - ? where uid = ? and bid = ?; update users set wallet = wallet + ? where uid = ?',[uid,bid,amount,description,1,date,parseInt(amount),uid,bid,parseInt(amount),uid],function (err, resultss) {
+                    if(err) throw err;
+
+                    req.flash('message','The amount was Withdrawn Successfully!');
+                    res.redirect('/mybanks');
+                });
+            }
+            else{
+                db.query('insert into withdraw values (?,?,?,?,?,?); update mybanks set currentbalance = currentbalance - ? where uid = ? and bid = ?;',[uid,bid,amount,description,0,date,parseInt(amount),uid,bid],function (err, resultss) {
+                    if(err) throw err;
+                    req.flash('message','The amount was Withdrawn Successfully!');
+                    res.redirect('/mybanks');
+                });
+            }
+
         }
         else{
-            res.send('okkkk');
+            req.flash('message', 'Insufficient amount! Withdrawal Failed.');
+            res.redirect('/mybanks');
         }
-    });*/
+    });
 
 };
 

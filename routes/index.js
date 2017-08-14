@@ -40,7 +40,7 @@ module.exports = function (app,passport) {
     app.get('/mybanks/delete/:bid',isLoggedIn,dataController.deleteMyBanks);
 
 
-    app.get('/user/process/withdraw',isLoggedIn,dataController.processWithdraw);
+    app.post('/user/process/withdraw',isLoggedIn,dataController.processWithdraw);
     app.post('/user/process/deposit',isLoggedIn,dataController.processDeposit);
 
 };
@@ -52,6 +52,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
 
+    req.flash('message','You are not logged in!');
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
