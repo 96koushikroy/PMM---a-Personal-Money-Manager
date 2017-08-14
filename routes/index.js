@@ -1,6 +1,8 @@
 var dataController = require('./users.js');
 
 module.exports = function (app,passport) {
+
+
     app.get('/',dataController.showHome);
     app.get('/login',dataController.showLogin);
     app.get('/signup',dataController.showSignup);
@@ -29,5 +31,19 @@ module.exports = function (app,passport) {
         res.redirect('/');
     });
 
+    app.get('/admin/addbank',dataController.showAddBankAdmin);
+    app.post('/admin/addbank',dataController.postAddBankAdmin);
 
+    app.get('/mybanks',isLoggedIn,dataController.showMyBanks);
+};
+
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
 }
