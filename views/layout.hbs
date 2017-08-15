@@ -26,27 +26,37 @@
 
   <nav class="navbar navbar-inverse" role="navigation">
       <div class="navbar-header">
-          <a class="navbar-brand" href="#">Personal Money Manager</a>
+          <a class="navbar-brand" href="{{homeUrl}}">Personal Money Manager</a>
       </div>
 
       <ul class="nav navbar-nav">
           <li><a href="{{homeUrl}}"><i class="fa fa-home"></i>Home</a></li>
           {{#if currentUser}}
-
+              <li>
+                  <a href="{{homeUrl}}/mybanks">
+                      <span class="fa fa-bank"></span> Banks
+                  </a>
+              </li>
+              <li class="dropdown">
+                  <a href="#" class="active dropdown-toggle" data-toggle="dropdown"><i class="fa fa-money"></i> Wallet: {{currentUser.wallet}} ৳<i class="fa fa-chevron-down"></i></a>
+                  <ul class="dropdown-menu">
+                      <div class="arrow top"></div>
+                      <li>
+                          <a onclick="$('#addWallet').modal('show')" class="" href="#">
+                              <span class="fa fa-plus"></span> Add Money
+                          </a>
+                      </li>
+                      <li>
+                          <a onclick="$('#removeWallet').modal('show')" class="" href="#">
+                              <span class="fa fa-minus"></span> Spend Money
+                          </a>
+                      </li>
+                  </ul>
+              </li>
               <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello, {{currentUser.name}} <i class="fa fa-chevron-down"></i></a>
                   <ul class="dropdown-menu">
                       <div class="arrow top"></div>
-                      <li>
-                          <a href="{{homeUrl}}/mybanks">
-                              <span class="fa fa-bank"></span> Banks
-                          </a>
-                      </li>
-                      <li>
-                          <a href="#">
-                              <span class="fa fa-money"></span> Wallet
-                          </a>
-                      </li>
                       <li>
                           <a href="#">
                               <span class="fa fa-user"></span> Profile
@@ -60,6 +70,79 @@
                   </ul>
               </li>
 
+
+              <div id="removeWallet" class="modal fade">
+                  <div class="modal-dialog">
+                      <form action="/user/process/withdraw/wallet" method="post">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                  <h4 class="modal-title">Spend Money From Your Wallet -- Current Balance: {{currentUser.wallet}} ৳</h4>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="input-icon">
+                                      <span class="fa-money fa"></span>
+                                      <input type="number" class="form-control" name="amount" placeholder="Amount">
+                                  </div>
+
+                                  <br>
+
+                                  <div class="input-icon">
+                                      <span class="fa-book fa"></span>
+                                      <input type="text" class="form-control" name="desc" placeholder="Description">
+                                  </div>
+
+                                  <br>
+
+                                  <div class="input-icon">
+                                      <span class="fa-calendar fa"></span>
+                                      <input type="date" class="form-control" name="date" placeholder="Date">
+                                  </div>
+
+                              </div>
+
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <input type="submit" value="Complete" class="btn btn-primary">
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+
+
+              <div id="addWallet" class="modal fade">
+                  <div class="modal-dialog">
+                      <form action="/user/process/deposit/wallet" method="post">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                  <h4 class="modal-title">Add Money To Your Wallet -- Current Balance: {{currentUser.wallet}} ৳</h4>
+                              </div>
+                              <div class="modal-body">
+                                  <div class="input-icon">
+                                      <span class="fa-money fa"></span>
+                                      <input type="number" class="form-control" name="amount" placeholder="Amount">
+                                  </div>
+                                  <br>
+                                  <div class="input-icon">
+                                      <span class="fa-book fa"></span>
+                                      <input type="text" class="form-control" name="desc" placeholder="Description">
+                                  </div>
+                                  <br>
+                                  <div class="input-icon">
+                                      <span class="fa-calendar fa"></span>
+                                      <input type="date" class="form-control" name="date" placeholder="Date">
+                                  </div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <input type="submit" value="Complete" class="btn btn-primary">
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
 
 
 
