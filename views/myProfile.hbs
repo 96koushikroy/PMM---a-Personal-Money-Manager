@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        {{#if message}}
+            <div class="alert alert-primary">
+                {{message}}
+            </div>
+        {{/if}}
+        <br>
+        <div class="tile tile-profile" style="background-color: #364347">
+            <img src="{{profilePic}}" alt="">
+            <h4>{{currentUser.name}}</h4>
+            <p>{{currentUser.email}}</p>
+            <hr>
+            <h4>Change Password</h4>
+            <br>
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <form action="/profile" method="post">
+                        <div class="input-icon">
+                            <span class="fa-lock fa"></span>
+                            <input type="password" class="form-control" name="curpassword" placeholder="Current Password">
+                        </div>
+                        <br>
+                        <div class="input-icon">
+                            <span class="fa-lock fa"></span>
+                            <input type="password" class="form-control" name="newpassword" placeholder="New Password">
+                        </div>
+                        <br>
+                        <a href="#" class="btn btn-block btn-danger btn-embossed login-button">Save</a>
+                    </form>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+<script>
+    $(document).ready(function(){
+        $(document).on("click",".login-button",function(){
+            var form = $(this).closest("form");
+            //console.log(form);
+            form.submit();
+        });
+    });
+</script>

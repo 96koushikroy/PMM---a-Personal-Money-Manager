@@ -1,6 +1,8 @@
 var express = require('express');
+var gravatar = require('gravatar');
 var router = express.Router();
 var db = require('./db.js');
+var bcrypt = require('bcrypt-nodejs');
 
 router.showHome = function(req, res){
     getBanks(function(res){
@@ -169,6 +171,32 @@ router.processWalletSpent = function (req, res) {
     });
 
 };
+
+
+router.showMyProfile = function (req, res) {
+    var unsecureUrl = gravatar.url(req.user.email, {s: '100', r: 'x', d: 'retro'}, false);
+    res.render('myProfile',{message: req.flash('message'),pageTitle:'My Profile',profilePic:unsecureUrl});
+};
+
+router.processChangePass = function (req,res) {
+    db.query("SELECT password FROM users WHERE email = ?",[req.user.email], function(err, rows){
+        if (err) throw err;
+
+        if (!bcrypt.compareSync(req.body.curpassword, rows[0].password)){
+            req.flash('message', 'Oops! Wrong password.');
+            res.redirect('/profile');
+        }
+        else{
+            var newPass = bcrypt.hashSync(req.body.newpassword, null, null);
+            var insertQuery = "update users set password = ? where email = ?";
+            db.query(insertQuery,[newPass,req.user.email],function(err, rows) {
+                req.flash('message', 'Password Updated Successfully!');
+                res.redirect('/profile');
+            });
+        }
+    });
+};
+
 
 
 
