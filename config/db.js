@@ -3,8 +3,7 @@ module.exports = {
         host     : 'localhost',
         user     : 'root',
         password : 'Qwert3201',
-        database : 'PMM',
-        multipleStatements: true
+        database : 'PMM'
     },
     'database': 'PMM',
     'users_table': 'users'
