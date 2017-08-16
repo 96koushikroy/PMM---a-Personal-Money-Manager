@@ -6,7 +6,7 @@ router.showHome = function(req, res){
     getBanks(function(res){
         BankList = res;
     });
-    res.render('index', { title: 'PMM - a minimalistic Personal Money Manager',pageTitle:'Home'});
+    res.render('index', { title: 'PMM - a minimalistic Personal Money Manager',pageTitle:'Home',message:req.flash('message')});
 };
 
 router.showLogin = function (req, res) {
@@ -125,6 +125,46 @@ router.processWithdraw = function (req, res) {
         else{
             req.flash('message', 'Insufficient amount! Withdrawal Failed.');
             res.redirect('/mybanks');
+        }
+    });
+
+};
+
+router.processWalletAdd = function (req, res) {
+    var uid = req.user.uid;
+    var amount = req.body.amount;
+    var description = req.body.desc;
+    var date = req.body.date;
+
+    db.query('insert into wallet_add values (?,?,?,?); update users set wallet = wallet + ? where uid = ?;',[uid,amount,description,date,parseInt(amount),uid], function (error, results, fields) {
+        if (error) throw error;
+        req.flash('message', 'The amount was added to the Wallet Successfully!');
+        res.redirect('back');
+    });
+};
+
+
+router.processWalletSpent = function (req, res) {
+    var uid = req.user.uid;
+    var amount = req.body.amount;
+    var description = req.body.desc;
+    var date = req.body.date;
+
+
+    db.query('select wallet from users where uid = ?',[uid], function (error, results, fields) {
+        if (error) throw error;//es.render('addMyBank',{pageTitle: 'My Banks',message:error});
+        //console.log('data' + results[0].currentbalance);
+        var currentBalance = results[0].wallet - parseInt(amount);
+        if(currentBalance >= 0){
+            db.query('insert into wallet_spent values (?,?,?,?); update users set wallet = wallet - ? where uid = ?;',[uid,amount,description,date,parseInt(amount),uid],function (err, resultss) {
+                if(err) throw err;
+                req.flash('message','The amount was deducted Successfully!');
+                res.redirect('back');
+            });
+        }
+        else{
+            req.flash('message', 'Insufficient amount! You are ' + (currentBalance*-1).toString() + ' Taka short.');
+            res.redirect('back');
         }
     });
 

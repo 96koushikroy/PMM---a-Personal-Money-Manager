@@ -1,7 +1,17 @@
 <h1>{{title}}</h1>
-{{#if message}}
-    <div class="alert alert-danger">
-        {{message}}
-    </div>
-{{/if}}
+
 <p>Welcome to {{title}}</p>
+
+<div class="row">
+    <div class="col-md 4"></div>
+    <div class="col-md 4">
+        {{#if message}}
+            <div class="alert alert-primary">
+                {{message}}
+            </div>
+        {{/if}}
+    </div>
+    <div class="col-md 4"></div>
+</div>
+
+

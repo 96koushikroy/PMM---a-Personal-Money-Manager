@@ -43,15 +43,16 @@ module.exports = function (app,passport) {
     app.post('/user/process/withdraw',isLoggedIn,dataController.processWithdraw);
     app.post('/user/process/deposit',isLoggedIn,dataController.processDeposit);
 
+    app.post('/user/process/walletAdd',isLoggedIn,dataController.processWalletAdd);
+    app.post('/user/process/walletSpent',isLoggedIn,dataController.processWalletSpent);
+
+
 };
 
 
 function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on
     if (req.isAuthenticated())
         return next();
-    // if they aren't redirect them to the home page
     res.redirect('/');
 }
 
