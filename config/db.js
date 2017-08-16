@@ -1,7 +1,7 @@
 module.exports = {
     'connection': {
-        host     : 'localhost',
-        user     : 'root',
+        host     : '192.168.0.107',
+        user     : 'koushik',
         password : 'Qwert3201',
         database : 'PMM'
     },
