@@ -110,9 +110,9 @@ router.processWithdraw = function (req, res) {
         var currentBalance = results[0].currentbalance - parseInt(amount);
         if(currentBalance >= 0){
             if(wallet){
-                db.query('insert into withdraw values (?,?,?,?,?,?); update mybanks set currentbalance = currentbalance - ? where uid = ? and bid = ?; update users set wallet = wallet + ? where uid = ?',[uid,bid,amount,description,1,date,parseInt(amount),uid,bid,parseInt(amount),uid],function (err, resultss) {
+                db.query('insert into wallet_add values (?,?,?,?);insert into withdraw values (?,?,?,?,?,?); update mybanks set currentbalance = currentbalance - ? where uid = ? and bid = ?; update users set wallet = wallet + ? where uid = ?',[uid,amount,description + ' #FromBank',date,uid,bid,amount,description,1,date,parseInt(amount),uid,bid,parseInt(amount),uid],function (err, resultss) {
                     if(err) throw err;
-                    req.flash('message','The amount was Withdrawn Successfully!');
+                    req.flash('message','The amount was Withdrawn and added to your Wallet Successfully!');
                     res.redirect('/mybanks');
                 });
             }
