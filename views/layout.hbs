@@ -38,7 +38,7 @@
                   </a>
               </li>
               <li class="dropdown">
-                  <a href="#" class="active dropdown-toggle" data-toggle="dropdown"><i class="fa fa-money"></i> Wallet: {{currentUser.wallet}} ৳<i class="fa fa-chevron-down"></i></a>
+                  <a href="#" class="active dropdown-toggle" data-toggle="dropdown"><i class="fa fa-money"></i> Wallet: {{#if currentUser.wallet}}{{currentUser.wallet}}{{else}}0{{/if}} ৳<i class="fa fa-chevron-down"></i></a>
                   <ul class="dropdown-menu">
                       <div class="arrow top"></div>
                       <li>
@@ -49,6 +49,12 @@
                       <li>
                           <a onclick="$('#removeWallet').modal('show')" class="" href="#">
                               <span class="fa fa-minus"></span> Spend Money
+                          </a>
+                      </li>
+
+                      <li>
+                          <a class="" href="{{homeUrl}}/wallet/stats">
+                              <span class="fa fa-bar-chart-o"></span> Stats
                           </a>
                       </li>
                   </ul>

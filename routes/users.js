@@ -198,6 +198,72 @@ router.processChangePass = function (req,res) {
 };
 
 
+router.showSearchWallet = function (req, res) {
+    res.render('walletStats',{message: req.flash('message'),pageTitle:'Wallet Statistics',addData:req.flash('addData'),addSum:req.flash('addSum'),expData:req.flash('expData'),expSum:req.flash('expSum')});
+};
+
+
+router.processSearchWallet = function (req, res) {
+    var sd = req.body.sd;
+    var ed = req.body.ed;
+    var desc = req.body.desc;
+    var add = req.body.add;
+    var exp = req.body.exp;
+    var uid = req.user.uid;
+
+    if(!sd || !ed){
+        req.flash('message','Error! You need to put in dates for your search!');
+        res.redirect('back');
+    }
+
+
+    if(add && !exp){
+        var dataQuery = 'select * from wallet_add where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+        var sumQuery = 'select sum(amount) as ss from wallet_add where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+
+        var FinalQry = dataQuery + sumQuery;
+
+        db.query(FinalQry,function(err, rows, fields) {
+            if(err) throw err;
+            res.render('walletStats',{message: req.flash('message'),pageTitle:'Wallet Statistics',addData:rows[0],addSum:rows[1][0].ss,expData:req.flash('expData'),expSum:req.flash('expSum')});
+        });
+
+
+    }
+    else if(!add && exp){
+        var dataQuery = 'select * from wallet_spent where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+        var sumQuery = 'select sum(amount) as ss from wallet_spent where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+
+        var FinalQry = dataQuery + sumQuery;
+
+        db.query(FinalQry,function(err, rows, fields) {
+            if(err) throw err;
+            res.render('walletStats',{message: req.flash('message'),pageTitle:'Wallet Statistics',addData:0,addSum:0,expData:rows[0],expSum:rows[1][0].ss});
+        });
+    }
+    else if(add && exp){
+        var dataQuery1 = 'select * from wallet_add where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+        var sumQuery1 = 'select sum(amount) as ss from wallet_add where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+        var dataQuery2 = 'select * from wallet_spent where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+        var sumQuery2 = 'select sum(amount) as ss from wallet_spent where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%";';
+
+        var FinalQry = dataQuery1 + sumQuery1 + dataQuery2 + sumQuery2;
+
+        db.query(FinalQry,function(err, rows, fields) {
+            if(err) throw err;
+            res.render('walletStats',{message: req.flash('message'),pageTitle:'Wallet Statistics',addData:rows[0],addSum:rows[1][0].ss,expData:rows[2],expSum:rows[3][0].ss});
+        });
+
+    }
+    else{
+        req.flash('message','Error! You need to select at least one of the checkboxes!');
+        res.redirect('back');
+    }
+
+
+};
+
+
 
 
 module.exports = router;

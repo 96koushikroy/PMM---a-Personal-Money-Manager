@@ -48,6 +48,10 @@ module.exports = function (app,passport) {
 
     app.get('/profile',isLoggedIn,dataController.showMyProfile);
     app.post('/profile', isLoggedIn, dataController.processChangePass);
+
+    app.get('/wallet/stats',isLoggedIn,dataController.showSearchWallet);
+    app.post('/wallet/stats',isLoggedIn,dataController.processSearchWallet);
+
 };
 
 

@@ -11,15 +11,15 @@
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
-    "express": "~4.15.2",
+    "express": "^4.15.4",
     "express-myconnection": "^1.0.4",
-    "express-session": "^1.15.4",
+    "express-session": "^1.15.5",
+    "gravatar": "^1.6.0",
     "hbs": "~4.0.1",
     "morgan": "~1.8.1",
-    "mysql": "^2.14.0",
+    "mysql": "^2.14.1",
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",
-    "serve-favicon": "~2.4.2",
-    "gravatar": "~1.6.0"
+    "serve-favicon": "~2.4.2"
   }
 }

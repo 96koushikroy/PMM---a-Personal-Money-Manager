@@ -22,6 +22,7 @@ module.exports = function(passport) {
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
         connection.query("SELECT * FROM users WHERE uid = ? ",[id], function(err, rows){
+            console.log("id: " + rows);
             done(err, rows[0]);
         });
     });
@@ -64,7 +65,7 @@ module.exports = function(passport) {
                         var insertQuery = "INSERT INTO users ( email, name, password ) values (?,?,?)";
                         connection.query(insertQuery,[newUserMysql.email,newUserMysql.name, newUserMysql.password],function(err, rows) {
                             console.log(insertQuery);
-                            newUserMysql.id = rows.insertId;
+                            newUserMysql.uid = rows.insertId;
                             return done(null, newUserMysql);
                         });
                     }

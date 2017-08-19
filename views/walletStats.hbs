@@ -1,0 +1,112 @@
+<div class="row">
+    <h3 class="text-center">Search Your Wallet Data</h3>
+    {{#if message}}
+        <div class="alert alert-primary">
+            {{message}}
+        </div>
+    {{/if}}
+    <form action="/wallet/stats" method="post">
+        <div class="col-md-4">
+            <label for="sd">
+                Start Date:
+            </label>
+            <div class="input-icon">
+                <span class="fa-money fa"></span>
+                <input type="date" class="form-control" name="sd" placeholder="Start Date">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="ed">
+                End Date:
+            </label>
+            <div class="input-icon">
+                <span class="fa-money fa"></span>
+                <input type="date" class="form-control" name="ed" placeholder="End Date">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label for="desc">
+                Descriptions:
+            </label>
+            <div class="input-icon">
+                <span class="fa-money fa"></span>
+                <input class="form-control" name="desc" placeholder="Description">
+            </div>
+            <br>
+            <label>Show Results For:</label>
+            <br>
+            <label for="add">Wallet Add </label>
+            <input type="checkbox" name="add" value="1">&nbsp;&nbsp;
+            <label for="add">Wallet Expenses </label>
+            <input type="checkbox" name="exp" value="1">
+            <br>
+            <a href="javascript:void(0)" class="login-button btn btn-block btn-primary btn-embossed"><i class="fa fa-search"></i> Search</a>
+        </div>
+    </form>
+
+</div>
+
+
+<div class="row">
+    {{#if addData}}
+        <div class="col-md-6">
+            <h3 class="text-center">Wallet Add Results</h3>
+            <table class="table table-bordered text-center" id="add">
+                <thead>
+                <tr>
+                    <th class="text-center">Amount (৳)</th>
+                    <th class="text-center">Description</th>
+                    <th class="text-center">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {{#each addData}}
+                        <tr>
+                            <td>{{amount}}</td>
+                            <td>{{description}}</td>
+                            <td>{{dtime}}</td>
+                        </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <br>
+            Sum: {{addSum}} ৳
+        </div>
+    {{/if}}
+    {{#if expData}}
+        <div class="col-md-6">
+            <h3 class="text-center">Wallet Expenses Results</h3>
+            <table class="table table-bordered text-center" id="exp">
+                <thead>
+                <tr>
+                    <th class="text-center">Amount (৳)</th>
+                    <th class="text-center">Description</th>
+                    <th class="text-center">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#each expData}}
+                    <tr>
+                        <td>{{amount}}</td>
+                        <td>{{description}}</td>
+                        <td>{{dtime}}</td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <br>
+            Sum: {{expSum}} ৳
+        </div>
+    {{/if}}
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $(document).on("click",".login-button",function(){
+            var form = $(this).closest("form");
+            //console.log(form);
+            form.submit();
+        });
+    });
+</script>
