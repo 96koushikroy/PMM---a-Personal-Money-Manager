@@ -1,11 +1,11 @@
 module.exports = {
     'connection': {
-        host     : 'host',
-        user     : 'user',
-        password : 'pass',
-        database : 'db_name',
+        host     : 'localhost',
+        user     : 'root',
+        password : 'Qwert3201',
+        database : 'PMM',
         multipleStatements: true
     },
-    'database': 'db_name',
+    'database': 'PMM',
     'users_table': 'users'
 };
