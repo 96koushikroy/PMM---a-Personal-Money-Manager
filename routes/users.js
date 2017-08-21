@@ -22,6 +22,7 @@ router.showSignup = function (req, res) {
 var BankList = [];
 
 function getBanks(cb) {
+    console.log(homeUrl);
     db.query('SELECT * From banks', function (error, results, fields) {
         if (error) throw error;
         cb(results);

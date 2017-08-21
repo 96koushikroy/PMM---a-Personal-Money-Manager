@@ -43,7 +43,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user; // This is the important line
-    res.locals.homeUrl = 'http://'+req.headers.host;
+    res.locals.homeUrl = 'https://'+req.headers.host;
     next();
 });
 
