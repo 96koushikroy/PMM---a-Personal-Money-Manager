@@ -52,6 +52,10 @@ module.exports = function (app,passport) {
     app.get('/wallet/stats',isLoggedIn,dataController.showSearchWallet);
     app.post('/wallet/stats',isLoggedIn,dataController.processSearchWallet);
 
+
+    app.get('/bank/stats',isLoggedIn,dataController.showBankStats);
+    app.post('/bank/stats',isLoggedIn,dataController.processBankStats);
+
 };
 
 

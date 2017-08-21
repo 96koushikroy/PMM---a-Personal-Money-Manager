@@ -32,10 +32,22 @@
       <ul class="nav navbar-nav">
           <li><a href="{{homeUrl}}"><i class="fa fa-home"></i>Home</a></li>
           {{#if currentUser}}
-              <li>
-                  <a href="{{homeUrl}}/mybanks">
-                      <span class="fa fa-bank"></span> Banks
-                  </a>
+
+              <li class="dropdown">
+                  <a href="#" class="active dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bank"></i> Banks<i class="fa fa-chevron-down"></i></a>
+                  <ul class="dropdown-menu">
+                      <div class="arrow top"></div>
+                      <li>
+                          <a class="" href="{{homeUrl}}/mybanks">
+                              <span class="fa fa-book"></span> Manage Banks
+                          </a>
+                      </li>
+                      <li>
+                          <a class="" href="{{homeUrl}}/bank/stats">
+                              <span class="fa fa-bar-chart-o"></span> Banking Stats
+                          </a>
+                      </li>
+                  </ul>
               </li>
               <li class="dropdown">
                   <a href="#" class="active dropdown-toggle" data-toggle="dropdown"><i class="fa fa-money"></i> Wallet: {{#if currentUser.wallet}}{{currentUser.wallet}}{{else}}0{{/if}} ৳<i class="fa fa-chevron-down"></i></a>
@@ -54,7 +66,7 @@
 
                       <li>
                           <a class="" href="{{homeUrl}}/wallet/stats">
-                              <span class="fa fa-bar-chart-o"></span> Stats
+                              <span class="fa fa-bar-chart-o"></span> Wallet Stats
                           </a>
                       </li>
                   </ul>

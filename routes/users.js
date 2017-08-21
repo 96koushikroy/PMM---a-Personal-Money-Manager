@@ -263,6 +263,77 @@ router.processSearchWallet = function (req, res) {
 
 };
 
+router.showBankStats = function (req, res) {
+    db.query("select * from banks where id in (select bid from mybanks where uid = ?);",req.user.uid,function(err, rows, fields) {
+        if(err) throw err;
+        res.render('bankStats',{message: req.flash('message'),pageTitle:'Bank Statistics',addData:req.flash('addData'),addSum:req.flash('addSum'),expData:req.flash('expData'),expSum:req.flash('expSum'),myBanks:rows});
+    });
+};
+
+
+router.processBankStats = function (req, res) {
+    var sd = req.body.sd;
+    var ed = req.body.ed;
+    var desc = req.body.desc;
+    var deposit = req.body.add;
+    var withdraw = req.body.exp;
+    var uid = req.user.uid;
+    var banks = req.body.mb;//contains list of selected banks
+
+    var commonQuery = "select * from banks where id in (select bid from mybanks where uid = "+uid+");";
+
+
+    if(!sd || !ed){
+        req.flash('message','Error! You need to put in dates for your search!');
+        res.redirect('back');
+    }
+
+
+    if(deposit && !withdraw){
+        var dataQuery = 'select * from deposit d join banks b on b.id = d.bid where d.uid = '+uid+' and (d.dtime between "'+sd+'" and "'+ed+'") and d.description like "%'+desc+'%" and d.bid in ('+ banks +');';
+        var sumQuery = 'select sum(d.amount) as ss from deposit d join banks b on b.id = d.bid where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%" and d.bid in ('+ banks +');';
+        //console.log(dataQuery);
+        var FinalQry = dataQuery + sumQuery + commonQuery;
+
+        db.query(FinalQry,function(err, rows, fields) {
+            if(err) throw err;
+            res.render('bankStats',{message: req.flash('message'),pageTitle:'Bank Statistics',addData:rows[0],addSum:rows[1][0].ss,expData:req.flash('expData'),expSum:req.flash('expSum'),myBanks:rows[2]});
+        });
+
+
+    }
+    else if(!deposit && withdraw){
+        var dataQuery = 'select * from withdraw w join banks b on b.id = w.bid where w.uid = '+uid+' and (w.dtime between "'+sd+'" and "'+ed+'") and w.description like "%'+desc+'%" and w.bid in ('+ banks +');';
+        var sumQuery = 'select sum(w.amount) as ss from withdraw w join banks b on b.id = w.bid where w.uid = '+uid+' and (w.dtime between "'+sd+'" and "'+ed+'") and w.description like "%'+desc+'%" and w.bid in ('+ banks +');';
+        //console.log(dataQuery);
+        var FinalQry = dataQuery + sumQuery + commonQuery;
+
+        db.query(FinalQry,function(err, rows, fields) {
+            if(err) throw err;
+            res.render('bankStats',{message: req.flash('message'),pageTitle:'Bank Statistics',addData:0,addSum:0,expData:rows[0],expSum:rows[1][0].ss,myBanks:rows[2]});
+        });
+    }
+    else if(deposit && withdraw){
+        var dataQuery1 = 'select * from deposit d join banks b on b.id = d.bid where d.uid = '+uid+' and (d.dtime between "'+sd+'" and "'+ed+'") and d.description like "%'+desc+'%" and d.bid in ('+ banks +');';
+        var sumQuery1 = 'select sum(d.amount) as ss from deposit d join banks b on b.id = d.bid where uid = '+uid+' and (dtime between "'+sd+'" and "'+ed+'") and description like "%'+desc+'%" and d.bid in ('+ banks +');';
+
+        var dataQuery2 = 'select * from withdraw w join banks b on b.id = w.bid where w.uid = '+uid+' and (w.dtime between "'+sd+'" and "'+ed+'") and w.description like "%'+desc+'%" and w.bid in ('+ banks +');';
+        var sumQuery2 = 'select sum(w.amount) as ss from withdraw w join banks b on b.id = w.bid where w.uid = '+uid+' and (w.dtime between "'+sd+'" and "'+ed+'") and w.description like "%'+desc+'%" and w.bid in ('+ banks +');';
+
+        var FinalQry = dataQuery1 + sumQuery1 + dataQuery2 + sumQuery2 + commonQuery;
+
+        db.query(FinalQry,function(err, rows, fields) {
+            if(err) throw err;
+            res.render('bankStats',{message: req.flash('message'),pageTitle:'Bank Statistics',addData:rows[0],addSum:rows[1][0].ss,expData:rows[2],expSum:rows[3][0].ss,myBanks:rows[4]});
+        });
+
+    }
+    else{
+        req.flash('message','Error! You need to select at least one of the checkboxes!');
+        res.redirect('back');
+    }
+
+};
 
 
 
