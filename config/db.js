@@ -1,11 +1,11 @@
 module.exports = {
     'connection': {
-        host     : '192.168.0.107',
-        user     : 'koushik',
-        password : 'Qwert3201',
-        database : 'PMM',
+        host     : 'koushikr.heliohost.org',
+        user     : 'koushikr',
+        password : 'cse311',
+        database : 'koushikr_pmm',
         multipleStatements: true
     },
-    'database': 'PMM',
+    'database': 'koushikr_pmm',
     'users_table': 'users'
 };
